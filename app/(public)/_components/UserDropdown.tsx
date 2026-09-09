@@ -20,9 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useSignout } from "@/hooks/use-signout";
 
 interface IAppProps {
   name: string;
@@ -31,21 +29,7 @@ interface IAppProps {
 }
 
 export function UserDropdown({ name, email, image }: IAppProps) {
-  const router = useRouter();
-
-  async function signOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-          toast.success("Signed out successfully!");
-        },
-        onError: () => {
-          toast.error("Failed to sign out!");
-        },
-      },
-    });
-  }
+  const handleSignout = useSignout();
 
   return (
     <DropdownMenu>
@@ -125,7 +109,7 @@ export function UserDropdown({ name, email, image }: IAppProps) {
           className="cursor-pointer"
           nativeButton={true}
           render={
-            <Button onClick={signOut} className="py-2 w-full">
+            <Button onClick={handleSignout} className="py-2 w-full">
               <LogOut />
               <span>Logout</span>
             </Button>
