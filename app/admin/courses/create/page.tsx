@@ -38,6 +38,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/rich-text-editor/Editor";
 
 export default function CourseCreationPage() {
   const [isPending, startTransition] = useTransition();
@@ -184,7 +185,7 @@ export default function CourseCreationPage() {
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor={field.name}>Description</FieldLabel>
 
-                    {/* <RichTextEditor field={field} /> */}
+                    <RichTextEditor field={field} />
 
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
