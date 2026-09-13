@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { RichTextEditor } from "@/components/rich-text-editor/Editor";
+import { Uploader } from "@/components/file-uploader/Uploader";
 
 export default function CourseCreationPage() {
   const [isPending, startTransition] = useTransition();
@@ -203,11 +204,11 @@ export default function CourseCreationPage() {
                       Thumbnail Image
                     </FieldLabel>
 
-                    {/* <Uploader
+                    <Uploader
                       onChange={field.onChange}
                       value={field.value}
-                      fieldTypeAccepted="image"
-                    /> */}
+                      // fieldTypeAccepted="image"
+                    />
 
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
