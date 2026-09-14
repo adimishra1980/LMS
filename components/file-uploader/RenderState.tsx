@@ -54,7 +54,7 @@ export function RenderUploadedState({
   fileType: "image" | "video";
 }) {
   return (
-    <div>
+    <div className="">
       <Image
         src={previewUrl}
         alt="Uploaded File"

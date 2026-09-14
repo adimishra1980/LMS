@@ -3,17 +3,15 @@
 import { courseSchema, CourseSchemaType } from "@/lib/zodSchema";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { requireAdmin } from "@/app/data/admin/require-admin";
 
 export async function CreateCourse(
   data: CourseSchemaType,
 ): Promise<ApiResponse> {
+  // in server actions this fnc needs to be outside the try-catch
+  const session = await requireAdmin();
+  
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
     const validation = courseSchema.safeParse(data);
 
     if (!validation.success) {

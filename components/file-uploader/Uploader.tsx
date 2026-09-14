@@ -119,6 +119,7 @@ export function Uploader({ value, onChange }: IAppProps) {
         xhr.send(file);
       });
     } catch (error) {
+      console.log("error incoming: ", error);
       toast.error("Semething went wrong");
       setFileState((prev) => ({
         ...prev,
@@ -288,7 +289,7 @@ export function Uploader({ value, onChange }: IAppProps) {
           : "border-border hover:border-primary",
       )}
     >
-      <CardContent className="flex items-center justify-center h-full w-full p-4">
+      <CardContent className="flex items-center justify-center h-full w-full p-4 relative">
         <input {...getInputProps()} />
         {renderContent()}
       </CardContent>
