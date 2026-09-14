@@ -1,0 +1,364 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Loader2, PlusIcon, SparkleIcon } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  courseCategories,
+  courseLevels,
+  courseSchema,
+  CourseSchemaType,
+  courseStatus,
+} from "@/lib/zodSchema";
+import slugify from "slugify";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/rich-text-editor/Editor";
+import { Uploader } from "@/components/file-uploader/Uploader";
+import { tryCatch } from "@/hooks/try-catch";
+import { toast } from "sonner";
+import { editCourse } from "../actions";
+import { AdminCourseSingularType } from "@/app/data/admin/admin-get-course";
+
+interface EditCourseFormProps {
+  data: AdminCourseSingularType;
+}
+
+export function EditCourseForm({ data }: EditCourseFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const form = useForm<CourseSchemaType>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: {
+      title: data.title,
+      description: data.description,
+      fileKey: data.fileKey,
+      price: data.price,
+      duration: data.duration,
+      level: data.level,
+      category: data.category as CourseSchemaType["category"],
+      smallDescription: data.smallDescription,
+      slug: data.slug,
+      status: data.status,
+    },
+  });
+
+  function onSubmit(values: CourseSchemaType) {
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(
+        editCourse(values, data.id),
+      );
+
+      if (error) {
+        toast.error("An unexpected error occurred. Please try again.");
+        return;
+      }
+
+      if (result.status === "success") {
+        toast.success(result.message);
+        // triggerConfetti();
+        form.reset();
+        router.push("/admin/courses");
+      } else if (result.status === "error") {
+        toast.error(result.message);
+      }
+    });
+  }
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <FieldGroup>
+        <Controller
+          control={form.control}
+          name="title"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+
+              <Input
+                {...field}
+                id={field.name}
+                placeholder="Enter Title"
+                aria-invalid={fieldState.invalid}
+                className="py-2 px-2 rounded-lg"
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <div className="flex items-end gap-4">
+          <Controller
+            control={form.control}
+            name="slug"
+            render={({ field, fieldState }) => (
+              <Field className="w-full" data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Slug</FieldLabel>
+
+                <Input
+                  {...field}
+                  id={field.name}
+                  placeholder="Enter Slug"
+                  aria-invalid={fieldState.invalid}
+                  className="py-2 px-2 rounded-lg"
+                />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Button
+            type="button"
+            className="w-fit"
+            onClick={() => {
+              const titleValue = form.getValues("title");
+
+              const slug = slugify(titleValue);
+
+              form.setValue("slug", slug, {
+                shouldValidate: true,
+              });
+            }}
+          >
+            Generate Slug
+            <SparkleIcon className="ml-1" size={16} />
+          </Button>
+        </div>
+
+        <Controller
+          control={form.control}
+          name="smallDescription"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Small Description</FieldLabel>
+
+              <Textarea
+                {...field}
+                id={field.name}
+                placeholder="Enter Small Description"
+                className="min-h-30"
+                aria-invalid={fieldState.invalid}
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="description"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+
+              <RichTextEditor field={field} />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="fileKey"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Thumbnail Image</FieldLabel>
+
+              <Uploader
+                onChange={field.onChange}
+                value={field.value}
+                initialPreviewUrl={"imageUrl" in data ? data.imageUrl : undefined}
+                // fieldTypeAccepted="image"
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Controller
+            control={form.control}
+            name="category"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Category</FieldLabel>
+
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger
+                    id={field.name}
+                    className="w-full"
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {courseCategories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            control={form.control}
+            name="level"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Level</FieldLabel>
+
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger
+                    id={field.name}
+                    className="w-full"
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder="Select Level" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    {courseLevels.map((level) => (
+                      <SelectItem key={level} value={level}>
+                        {level}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            control={form.control}
+            name="duration"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Duration (hours)</FieldLabel>
+
+                <Input
+                  {...field}
+                  id={field.name}
+                  placeholder="Enter duration"
+                  type="number"
+                  aria-invalid={fieldState.invalid}
+                  onChange={(event) =>
+                    field.onChange(Number(event.target.value))
+                  }
+                />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
+            control={form.control}
+            name="price"
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Price ($)</FieldLabel>
+
+                <Input
+                  {...field}
+                  id={field.name}
+                  placeholder="Enter price"
+                  type="number"
+                  aria-invalid={fieldState.invalid}
+                  onChange={(event) =>
+                    field.onChange(Number(event.target.value))
+                  }
+                />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </div>
+
+        <Controller
+          control={form.control}
+          name="status"
+          render={({ field, fieldState }) => (
+            <Field className="w-full" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Status</FieldLabel>
+
+              <Select onValueChange={field.onChange} value={field.value}>
+                <SelectTrigger
+                  id={field.name}
+                  className="w-full"
+                  aria-invalid={fieldState.invalid}
+                >
+                  <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {courseStatus.map((status) => (
+                    <SelectItem key={status} value={status}>
+                      {status}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      </FieldGroup>
+
+      <Button type="submit" disabled={isPending}>
+        {isPending ? (
+          <>
+            Updating...
+            <Loader2 className="animate-spin ml-1" />
+          </>
+        ) : (
+          <>
+            Update Course
+            <PlusIcon className="ml-1" size={16} />
+          </>
+        )}
+      </Button>
+    </form>
+  );
+}

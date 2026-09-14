@@ -28,9 +28,10 @@ interface UploaderState {
 interface IAppProps {
   value?: string;
   onChange?: (value: string) => void;
+  initialPreviewUrl?: string;
 }
 
-export function Uploader({ value, onChange }: IAppProps) {
+export function Uploader({ value, onChange, initialPreviewUrl }: IAppProps) {
   const [fileState, setFileState] = useState<UploaderState>({
     error: false,
     file: null,
@@ -40,6 +41,7 @@ export function Uploader({ value, onChange }: IAppProps) {
     isDeleting: false,
     fileType: "image",
     key: value,
+    objectUrl: initialPreviewUrl,
   });
 
   async function uploadFile(file: File) {
