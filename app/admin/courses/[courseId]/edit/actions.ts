@@ -6,8 +6,10 @@ import { ApiResponse } from "@/lib/types";
 import {
   ChapterSchemaType,
   CourseSchemaType,
+  LessonSchemaType,
   chapterSchema,
   courseSchema,
+  lessonSchema,
 } from "@/lib/zodSchema";
 import { revalidatePath } from "next/cache";
 
@@ -184,6 +186,59 @@ export async function createChapter(
     return {
       status: "error",
       message: "Failed to create chapter",
+    };
+  }
+}
+
+export async function createLesson(
+  values: LessonSchemaType,
+): Promise<ApiResponse> {
+  await requireAdmin();
+  try {
+    const result = lessonSchema.safeParse(values);
+
+    if (!result.success) {
+      return {
+        status: "error",
+        message: "Invalid data",
+      };
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const maxPos = await tx.lesson.findFirst({
+        where: {
+          chapterId: result.data.chapterId,
+        },
+        select: {
+          position: true,
+        },
+        orderBy: {
+          position: "desc",
+        },
+      });
+
+      await tx.lesson.create({
+        data: {
+          title: result.data.name,
+          description: result.data.description,
+          videoKey: result.data.videoKey,
+          thumbnailKey: result.data.thumbnailKey,
+          chapterId: result.data.chapterId,
+          position: (maxPos?.position ?? 0) + 1,
+        },
+      });
+    });
+
+    revalidatePath(`/admin/courses/${result.data.courseId}/edit`);
+
+    return {
+      status: "success",
+      message: "Lesson created successfully",
+    };
+  } catch {
+    return {
+      status: "error",
+      message: "Failed to create lesson",
     };
   }
 }
