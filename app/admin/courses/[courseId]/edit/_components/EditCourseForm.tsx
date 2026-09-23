@@ -190,7 +190,9 @@ export function EditCourseForm({ data }: EditCourseFormProps) {
               <Uploader
                 onChange={field.onChange}
                 value={field.value}
-                initialPreviewUrl={"imageUrl" in data ? data.imageUrl : undefined}
+                initialPreviewUrl={
+                  "imageUrl" in data ? data.imageUrl : undefined
+                }
                 // fieldTypeAccepted="image"
               />
 

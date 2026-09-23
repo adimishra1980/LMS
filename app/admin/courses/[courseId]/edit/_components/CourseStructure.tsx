@@ -39,6 +39,7 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapters, reorderLessons } from "../actions";
+import NewChapterModal from "./NewChapterModal";
 
 interface CourseStructureProps {
   data: AdminCourseSingularType;
@@ -297,7 +298,7 @@ export function CourseStructure({ data }: CourseStructureProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between border-b border-border">
           <CardTitle>Chapters</CardTitle>
-          {/* <NewChapterModal courseId={data.id} /> */}
+          <NewChapterModal courseId={data.id} />
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -326,6 +327,7 @@ export function CourseStructure({ data }: CourseStructureProps) {
                           </Button>
 
                           <CollapsibleTrigger
+                            nativeButton={false}
                             render={
                               <span className="flex items-center cursor-pointer p-2 rounded hover:bg-muted">
                                 {item.isOpen ? (
