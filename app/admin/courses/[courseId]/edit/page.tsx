@@ -23,7 +23,7 @@ export default async function EditRoute({ params }: { params: Params }) {
         <span className="text-primary underline">{data.title}</span>
       </h1>
 
-      <Tabs defaultValue="course-structure" className="w-full">
+      <Tabs defaultValue="basic-info" className="w-full">
         <TabsList className="grid grid-cols-2 w-full">
           <TabsTrigger
             value="basic-info"
