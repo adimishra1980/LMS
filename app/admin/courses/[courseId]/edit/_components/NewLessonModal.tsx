@@ -63,6 +63,9 @@ export function NewLessonModal({
   }
 
   const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      form.reset();
+    }
     setIsOpen(open);
   };
 
