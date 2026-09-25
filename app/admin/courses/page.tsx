@@ -1,11 +1,15 @@
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { adminGetCourses } from "@/app/data/admin/admin-get-courses";
-import { AdminCourseCard } from "./_components/AdminCourseCard";
+import {
+  AdminCourseCard,
+  AdminCourseCardSkeleton,
+} from "./_components/AdminCourseCard";
 import { RenderEmptyState } from "@/components/general/EmptyState";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 
-export default async function CoursesPage() {
-  const courses = await adminGetCourses();
+export default function CoursesPage() {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -16,20 +20,42 @@ export default async function CoursesPage() {
         </Link>
       </div>
 
-      {courses.length === 0 ? (
+      <Suspense fallback={<AdminCourseCardSkeletonLayout />}>
+        <RenderCourses />
+      </Suspense>
+    </>
+  );
+}
+
+async function RenderCourses() {
+  const data = await adminGetCourses();
+
+  return (
+    <>
+      {data.length === 0 ? (
         <RenderEmptyState
-          title="No courses found"
-          description="Create your first course to get started"
+          title="No course found"
+          description="Create a new course to get started"
           buttonText="Create Course"
           href="/admin/courses/create"
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-7">
-          {courses.map((course) => (
-            <AdminCourseCard data={course} key={course.id} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
+          {data.map((course) => (
+            <AdminCourseCard key={course.id} data={course} />
           ))}
         </div>
       )}
     </>
+  );
+}
+
+function AdminCourseCardSkeletonLayout() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
+      {Array.from({ length: 4 }).map((_, index) => (
+        <AdminCourseCardSkeleton key={index} />
+      ))}
+    </div>
   );
 }
