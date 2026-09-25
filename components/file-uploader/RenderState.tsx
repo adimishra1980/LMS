@@ -54,13 +54,17 @@ export function RenderUploadedState({
   fileType: "image" | "video";
 }) {
   return (
-    <div className="">
-      <Image
-        src={previewUrl}
-        alt="Uploaded File"
-        fill
-        className="object-contain p-2 w-full h-96"
-      />
+    <div className="relative group w-full h-full flex items-center justify-center">
+      {fileType === "video" ? (
+        <video src={previewUrl} controls className="rounded-md w-full h-full" />
+      ) : (
+        <Image
+          src={previewUrl}
+          alt="Uploaded File"
+          fill
+          className="object-contain p-2 w-full h-96"
+        />
+      )}
 
       <Button
         variant="destructive"

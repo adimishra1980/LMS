@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -226,7 +225,7 @@ export default function CourseCreationPage() {
                     <Uploader
                       onChange={field.onChange}
                       value={field.value}
-                      // fieldTypeAccepted="image"
+                      fieldTypeAccepted="image"
                     />
 
                     {fieldState.invalid && (

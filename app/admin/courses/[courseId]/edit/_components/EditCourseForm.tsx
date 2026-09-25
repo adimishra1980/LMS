@@ -193,7 +193,7 @@ export function EditCourseForm({ data }: EditCourseFormProps) {
                 initialPreviewUrl={
                   "imageUrl" in data ? data.imageUrl : undefined
                 }
-                // fieldTypeAccepted="image"
+                fieldTypeAccepted="image"
               />
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
