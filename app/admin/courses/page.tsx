@@ -7,7 +7,6 @@ import {
 } from "./_components/AdminCourseCard";
 import { RenderEmptyState } from "@/components/general/EmptyState";
 import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
 
 export default function CoursesPage() {
   return (
