@@ -35,7 +35,11 @@ export default function EnrollmentButton({ courseId }: { courseId: string }) {
   }
 
   return (
-    <Button className="w-full cursor-pointer" onClick={onSubmit} disabled={isPending}>
+    <Button
+      className="w-full cursor-pointer"
+      onClick={onSubmit}
+      disabled={isPending}
+    >
       {isPending ? (
         <>
           <Loader2 className="size-4 animate-spin" />
