@@ -1,17 +1,13 @@
 import { ChartAreaInteractive } from "@/components/sidebar/chart-area-interactive";
-import { DataTable } from "@/components/sidebar/data-table";
 import { SectionCards } from "@/components/sidebar/section-cards";
+import { adminGetEnrollmentStats } from "@/app/data/admin/admin-get-enrollment-stats";
 
-import data from "./data.json";
-
-export default function AdminPage() {
+export default async function AdminPage() {
+  const enrollmentData = await adminGetEnrollmentStats();
   return (
     <>
       <SectionCards />
-      <div className="px-4 lg:px-6">
-        <ChartAreaInteractive />
-      </div>
-      <DataTable data={data} />
+      <ChartAreaInteractive data={enrollmentData} />
     </>
   );
 }
