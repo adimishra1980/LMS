@@ -1,8 +1,11 @@
-import { prisma } from "@/lib/db";
-import { getCourseImageUrl } from "./admin-get-course-image-url";
-import { requireAdmin } from "./require-admin";
+import "server-only";
 
-export async function adminGetCourses() {
+import { prisma } from "@/lib/db";
+import { requireAdmin } from "./require-admin";
+import { getCourseImageUrl } from "./admin-get-course-image-url";
+
+export async function adminGetRecentCourses() {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   await requireAdmin();
 
   const data = await prisma.course.findMany({
@@ -31,5 +34,3 @@ export async function adminGetCourses() {
 
   return coursesWithImageUrl;
 }
-
-export type AdminCourseType = Awaited<ReturnType<typeof adminGetCourses>>[0];
