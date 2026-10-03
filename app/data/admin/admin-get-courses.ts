@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { getCourseImageUrl } from "./admin-get-course-image-url";
 import { requireAdmin } from "./require-admin";
