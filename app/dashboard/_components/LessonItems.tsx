@@ -62,7 +62,7 @@ export function LessonItem({ lesson, slug, isActive, completed }: iAppProps) {
             className={cn(
               "text-xs font-medium truncate",
               completed
-                ? "text-green-800 dark:text-green-200 "
+                ? "text-green-800 dark:text-green-200"
                 : isActive
                   ? "text-primary font-semibold"
                   : "text-foreground",
@@ -71,7 +71,7 @@ export function LessonItem({ lesson, slug, isActive, completed }: iAppProps) {
             {lesson.position}. {lesson.title}
           </p>
           {completed && (
-            <p className="text-[10px] text-green-700 dark:text-green-600  font-medium">
+            <p className="text-[10px] text-green-700 dark:text-green-600 font-medium">
               Completed
             </p>
           )}

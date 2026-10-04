@@ -1,3 +1,5 @@
+"use client";
+
 import { CourseSidebarDataType } from "@/app/data/course/get-course-sidebar-data";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,12 +10,17 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { ChevronDown, Play } from "lucide-react";
 import { LessonItem } from "./LessonItems";
+import { usePathname } from "next/navigation";
 
 interface iAppProps {
   course: CourseSidebarDataType["course"];
 }
 
 export function CourseSidebar({ course }: iAppProps) {
+  const pathname = usePathname();
+
+  const currentLessonId = pathname.split("/").pop();
+
   return (
     <div className="flex flex-col h-full">
       <div className="pb-4 pr-4 border-b border-border">
@@ -76,7 +83,8 @@ export function CourseSidebar({ course }: iAppProps) {
                   key={lesson.id}
                   lesson={lesson}
                   slug={course.slug}
-                  completed={true}
+                  completed={false}
+                  isActive={currentLessonId === lesson.id}
                 />
               ))}
             </CollapsibleContent>
