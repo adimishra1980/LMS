@@ -139,6 +139,9 @@ importers:
       '@prisma/client':
         specifier: ^6.8.2
         version: 6.19.3(prisma@6.8.2(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^7.10.0
+        version: 7.10.0
       '@t3-oss/env-core':
         specifier: ^0.13.11
         version: 0.13.11(typescript@5.9.3)(zod@4.5.4)
@@ -1278,6 +1281,9 @@ packages:
 
   '@prisma/get-platform@6.8.2':
     resolution: {integrity: sha512-vXSxyUgX3vm1Q70QwzwkjeYfRryIvKno1SXbIqwSptKwqKzskINnDUcx85oX+ys6ooN2ATGSD0xN2UTfg6Zcow==}
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.10.0':
+    resolution: {integrity: sha512-8MSZZrYjPY1azTSeb89tZjmk3OoyejwqsIpXA3zewNpKObHgfzlS3TE9P6jAUj816CNnTCo7Qi9zLDFjWsEmnQ==}
 
   '@reduxjs/toolkit@2.12.0':
     resolution: {integrity: sha512-KiT+RzZbp6mQET+Mg+h2c97+9j1sNflUxQkIHI7Yuzf6Peu+OYpmkn6nbHWmLLWj+1ZODUJFwGZ7gx3L9R9EOw==}
@@ -5662,6 +5668,8 @@ snapshots:
   '@prisma/get-platform@6.8.2':
     dependencies:
       '@prisma/debug': 6.8.2
+
+  '@prisma/nextjs-monorepo-workaround-plugin@7.10.0': {}
 
   '@reduxjs/toolkit@2.12.0(react-redux@9.3.0(@types/react@19.2.18)(react@19.2.8)(redux@5.0.1))(react@19.2.8)':
     dependencies:
