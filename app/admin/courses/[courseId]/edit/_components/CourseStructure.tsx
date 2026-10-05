@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
@@ -34,7 +34,6 @@ import {
   ChevronRight,
   FileText,
   GripVertical,
-  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -58,41 +57,37 @@ interface SortableItemProps {
   };
 }
 
-export function CourseStructure({ data }: CourseStructureProps) {
-  const initialItems =
+function buildItems(
+  data: AdminCourseSingularType,
+  prevItems?: { id: string; isOpen: boolean }[],
+) {
+  return (
     data.chapters.map((chapter) => ({
       id: chapter.id,
       title: chapter.title,
       order: chapter.position,
-      isOpen: true, // default is open
+      isOpen:
+        prevItems?.find((item) => item.id === chapter.id)?.isOpen ?? true,
       lessons: chapter.lessons.map((lesson) => ({
         id: lesson.id,
         title: lesson.title,
         order: lesson.position,
       })),
-    })) || [];
+    })) || []
+  );
+}
 
-  const [items, setItems] = useState(initialItems);
+export function CourseStructure({ data }: CourseStructureProps) {
+  const [items, setItems] = useState(() => buildItems(data));
+  const [prevData, setPrevData] = useState(data);
 
-  useEffect(() => {
-    setItems((prevItems) => {
-      const updatedItems =
-        data.chapters.map((chapter) => ({
-          id: chapter.id,
-          title: chapter.title,
-          order: chapter.position,
-          isOpen:
-            prevItems.find((item) => item.id === chapter.id)?.isOpen ?? true,
-          lessons: chapter.lessons.map((lesson) => ({
-            id: lesson.id,
-            title: lesson.title,
-            order: lesson.position,
-          })),
-        })) || [];
-
-      return updatedItems;
-    });
-  }, [data]);
+  // Sync items from props during render (not in an effect) to avoid cascading renders.
+  // React supports calling setState during render as long as it's conditional.
+  // See: https://react.dev/reference/react/useState#storing-information-from-previous-renders
+  if (prevData !== data) {
+    setPrevData(data);
+    setItems((prevItems) => buildItems(data, prevItems));
+  }
 
   function SortableItem({ id, children, className, data }: SortableItemProps) {
     const {
