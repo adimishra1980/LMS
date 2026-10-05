@@ -29,7 +29,6 @@ import {
   DatabaseIcon,
   FileChartColumnIcon,
   FileIcon,
-  CommandIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/public/logo.png";

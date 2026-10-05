@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 
 import { authClient } from "@/lib/auth-client";
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { Loader, Loader2, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";

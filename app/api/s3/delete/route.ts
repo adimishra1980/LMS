@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 
 export async function DELETE(request: NextRequest) {
-  const session = await requireAdmin();
+  await requireAdmin();
   try {
     const body = await request.json();
 

@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { fileName, contentType, size } = validation.data;
+    const { fileName, contentType } = validation.data;
 
     const uniqueKey = `${uuidv4()}-${fileName}`;
 

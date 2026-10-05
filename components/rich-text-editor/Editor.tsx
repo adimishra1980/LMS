@@ -4,8 +4,17 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Menubar } from "./Menubar";
 import TextAlign from "@tiptap/extension-text-align";
+import { courseSchema } from "@/lib/zodSchema";
+import type { ControllerRenderProps } from "react-hook-form";
+import * as z from "zod";
 
-export function RichTextEditor({ field }: { field: any }) {
+type FormValues = z.infer<typeof courseSchema>;
+
+interface RichTextEditorProps {
+  field: ControllerRenderProps<FormValues, "description">;
+}
+
+export function RichTextEditor({ field }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,

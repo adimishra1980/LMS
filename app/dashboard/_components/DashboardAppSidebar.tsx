@@ -21,9 +21,6 @@ import {
   Settings2Icon,
   CircleHelpIcon,
   SearchIcon,
-  DatabaseIcon,
-  FileChartColumnIcon,
-  FileIcon,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/public/logo.png";

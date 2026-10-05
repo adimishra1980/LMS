@@ -12,11 +12,11 @@ export default function PaymentSuccessfull() {
 
   useEffect(() => {
     triggerConfetti();
-  }, []);
+  }, [triggerConfetti]);
 
   return (
     <div className="w-full min-h-screen flex flex-1 justify-center items-center">
-      <Card className="w-[350px]">
+      <Card className="w-87.5">
         <CardContent>
           <div className="w-full flex justify-center">
             <CheckIcon className="size-12 p-2 bg-green-500/30 text-green-500 rounded-full" />

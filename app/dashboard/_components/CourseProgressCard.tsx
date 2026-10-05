@@ -16,6 +16,7 @@ interface iAppProps {
 
 export function CourseProgressCard({ data }: iAppProps) {
   const { totalLessons, completedLessons, progressPercentage } =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     useCourseProgress({ courseData: data.course as any });
 
   return (
